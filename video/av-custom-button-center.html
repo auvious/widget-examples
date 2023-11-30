@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script
+      type="module"
+      src="https://auvious.video/widget/dist/auvious/auvious.esm.js"
+    ></script>
+    <script
+      nomodule=""
+      src="https://auvious.video/widget/dist/auvious/auvious.js"
+    ></script>
+    <style type="text/css">
+      body {
+        background-color: #3a356f;
+      }
+      html:root {
+        --av-background-color-tray: #3a356f;
+        --av-color-primary: #3a356f
+          /* background color of primary buttons (launcher ) */;
+        --av-color-accent: #3a356f /* background color of secondary buttons */;
+        --av-font-color-light: #fff
+          /* text color in all dark containers (dark-mode on) */;
+      }
+
+      .big-button {
+        background-color: rgb(197 196 207);
+        color: #3a356f;
+        font-size: 3em;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin: 0;
+      }
+
+      .button-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <center>
+      <div>
+        <img src="0.jpg" style="max-width: 200px; float: center" />
+      </div>
+    </center>
+    <div class="button-container">
+      <button class="big-button" onclick="start()">Start video call</button>
+    </div>
+
+    <app-auvious-widget
+      id="widget"
+      style="display: none"
+      chat-mode="genesys-cloud"
+      locale="ar-WW"
+      active-widgets="video"
+      pc-queue="Deaf Service Queue"
+      application-id="9ba192be-9ec0-496d-9d31-88f14723cfe2"
+      pc-deployment-id="878ae954-ffee-4fb6-985d-953f72feb2a7"
+      close-hidden="false"
+      pc-organization-id="066a69b1-5a3a-4990-b1be-1e74fc6715a9"
+      pc-environment="mypurecloud.de"
+      greeting-sound-on="false"
+      dark-mode="false"
+      registration-type="name"
+      avatar-url=""
+      confirm-call="true"
+      greeting-sound-on="false"
+      kiosk-mode="true"
+    ></app-auvious-widget>
+
+    <script>
+      async function start() {
+        const widget = this.getWidget();
+
+        widget.setAttribute("style", "display: block");
+        await widget.setCustomerMetadata({
+          // set your own key-value pairs here
+          key1: "value1",
+          key2: "value2",
+        });
+        widget.launch("video");
+      }
+
+      (async () => {
+        await customElements.whenDefined("app-auvious-widget");
+        const widget = this.getWidget();
+
+        widget.addEventListener("conversationStarted", () => {});
+
+        widget.addEventListener("conversationEnded", () => {
+          const widget = this.getWidget();
+          widget.setAttribute("style", "display: none");
+        });
+      })();
+
+      function getWidget() {
+        return document.getElementById("widget");
+      }
+    </script>
+  </body>
+</html>
