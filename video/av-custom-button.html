@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <script type="module" src="https://auvious.video/widget/dist/auvious/auvious.esm.js"></script>
+  <script nomodule="" src="https://auvious.video/widget/dist/auvious/auvious.js"></script>
+
+  <style>
+    app-auvious-widget {
+      display: none;
+    }
+
+    .custom-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <div class="custom-button">
+    <button onclick="startCall()">start a video call</button>
+    <div id="console"></div>
+  </div>
+
+</body>
+
+<script>
+  // TODO: change params
+  let widgetOptions = {
+    'locale': 'en-US',
+    'pc-environment': 'mypurecloud.de',
+    'pc-organization-id': '<your-id>',
+    'pc-deployment-id': '<your-id>',
+    'application-id': '<your-id>',
+    'pc-queue': 'AppFoundry',
+    'registration-type': 'name',
+    'customer-display-name': 'Tester'
+  };
+
+  (async () => {
+    await customElements.whenDefined('app-auvious-widget');
+    showWidget();
+  })();
+
+  function showWidget() {
+
+    // create our widget
+    const widget = document.createElement('app-auvious-widget');
+
+    widget.setAttribute('id', 'auvious-widget');
+
+    // get all the widget options and pass it to our widget.
+    Object.keys(widgetOptions).forEach(key => {
+      const value = widgetOptions[key];
+      widget.setAttribute(key, value);
+    });
+
+    widget.addEventListener('queueTimeChanged', (e) => {
+      document.getElementById('console').innerHTML += 'waiting ' + e.detail.minutes + ':' + e.detail.seconds + '<br/>';
+    })
+
+    widget.addEventListener('callStarting', e => {
+      document.getElementById('console').innerHTML += 'call starting' + '<br/>';
+
+      // show widget
+      const widget = document.getElementById('auvious-widget');
+      widget.setAttribute('style', 'display:block');
+    });
+
+    widget.addEventListener('callEnded', e => {
+      document.getElementById('console').innerHTML += 'call ended' + '<br/>';
+      // find widget by id 
+      const widget = document.getElementById('auvious-widget');
+      widget.setAttribute('style', 'display:none');
+    });
+
+    widget.addEventListener('conversationEnded', () => {
+      document.getElementById('console').innerHTML = 'conversation ended' + '<br/>';
+      const widget = document.getElementById('auvious-widget');
+      widget.setAttribute('style', 'display:none');
+    });
+
+    // add the newly created widget to the body.
+    document.body.appendChild(widget);
+  }
+
+  function startCall() {
+    const widget = document.getElementById('auvious-widget');
+    widget.launch('video');
+  }
+</script>
+
+</html>

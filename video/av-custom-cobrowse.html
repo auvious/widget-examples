@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      type="module"
+      src="https://auvious.video/widget/dist/auvious/auvious.esm.js"
+    ></script>
+    <script
+      nomodule=""
+      src="https://auvious.video/widget/dist/auvious/auvious.js"
+    ></script>
+  </head>
+  <body>
+    <h1>Lorem Ipsum</h1>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+      scelerisque libero vel justo facilisis ullamcorper. Praesent semper ipsum
+      sem, at pellentesque lacus auctor eget. Integer accumsan, leo id semper
+      efficitur, nisi arcu viverra sapien, suscipit accumsan lectus erat ac
+      ipsum. Pellentesque accumsan lorem sit amet egestas pretium. In non
+      imperdiet diam. Maecenas at tortor convallis, viverra ipsum eu, malesuada
+      felis. Etiam elementum nibh pretium metus volutpat tincidunt. Curabitur
+      laoreet eleifend eros, faucibus hendrerit dolor pellentesque eget. Fusce
+      ut felis metus. Fusce ante nisi, fermentum non nibh id, maximus imperdiet
+      ipsum. Phasellus vehicula, nisl auctor cursus egestas, neque massa
+      interdum urna, vel convallis nisi libero eget libero. Morbi non lorem
+      magna. Integer lobortis, massa sit amet dapibus aliquam, mi quam
+      sollicitudin mi, sit amet iaculis risus leo quis mi. Aenean mattis magna
+      odio, nec vulputate turpis malesuada quis. Nunc finibus nibh sit amet
+      bibendum sodales. Proin sollicitudin egestas nibh, a posuere orci laoreet
+      quis.
+    </p>
+    <div>
+      <input id="pin" type="text" />
+      <button id="start-cobrowse" onclick="start()">start co-browse</button>
+    </div>
+
+    <app-auvious-widget
+      style="display: none"
+      active-widgets="cobrowse"
+      application-id="211b9e16-a3b4-465a-aa31-808875303d10"
+      greeting-sound-on="false"
+      customer-display-name="John Doe"
+      position-horizontal="left"
+    >
+    </app-auvious-widget>
+
+    <script>
+      (async () => {
+        await customElements.whenDefined("app-auvious-widget");
+        const widget = document.querySelector("app-auvious-widget");
+        widget.addEventListener("cobrowseConnecting", () => {
+          console.log("widget event: cobrowseConnecting");
+          document
+            .getElementById("start-cobrowse")
+            .setAttribute("disabled", true);
+
+          widget.setAttribute("style", "display: block");
+        });
+
+        widget.addEventListener("cobrowseConnected", () => {
+          console.log("widget event: cobrowseConnecting");
+        });
+
+        widget.addEventListener("cobrowseDisconnected", () => {
+          document.getElementById("start-cobrowse").removeAttribute("disabled");
+          document.getElementById("pin").value = "";
+          widget.setAttribute("style", "display: none");
+        });
+
+        widget.addEventListener("cobrowsePermissionsChanged", (e) => {
+          console.log("widget event: cobrowsePermissionsChanged", e.detail);
+        });
+      })();
+
+      function start() {
+        const pin = document.getElementById("pin").value;
+        if (pin) {
+          const widget = document.querySelector("app-auvious-widget");
+          widget.launch("cobrowse", pin);
+        }
+      }
+    </script>
+  </body>
+</html>

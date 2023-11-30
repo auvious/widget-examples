@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      type="module"
+      src="https://auvious.video/widget/dist/auvious/auvious.esm.js"
+    ></script>
+    <script
+      nomodule=""
+      src="https://auvious.video/widget/dist/auvious/auvious.js"
+    ></script>
+  </head>
+  <body>
+    <app-auvious-widget
+      chat-mode="genesys-cloud"
+      locale="es-GR"
+      active-widgets="video"
+      pc-queue="mike queue"
+      application-id="75bb4379-1924-4e4b-8bdd-65b0d0bfa5b5"
+      pc-deployment-id="6820a6a6-3755-4152-8d3f-53e7e8d2bedc"
+      close-hidden="false"
+      pc-organization-id="6e6d5224-1909-48fa-a982-66cef3fa4c08"
+      pc-environment="mypurecloud.de"
+      greeting-sound-on="false"
+    >
+    </app-auvious-widget>
+
+    <script>
+      (async () => {
+        var organisationId;
+        var queueName;
+        var agentId;
+        var interactionId;
+
+        await customElements.whenDefined("app-auvious-widget");
+        const widget = document.querySelector("app-auvious-widget");
+        widget.addEventListener("ready", () => {
+          widget.setTranslations(
+            {
+              "Hi there!": "Hola a todos!",
+              "How may we help you?": "En que podemos ayudarle?",
+            },
+            "es"
+          );
+        });
+
+        widget.addEventListener("conversationStarted", (e) => {
+          console.log("conversation id: " + e.detail);
+          interactionId = e.detail;
+        });
+
+        widget.addEventListener("agentConnected", (e) => {
+          console.log("agent id: " + e.detail);
+          agentId = e.detail;
+        });
+
+        widget.addEventListener("conversationEnded", () => {
+          alert(`show feedback form with 
+          organisationId: ${widget.getAttribute("pc-organization-id")}
+          queueName: ${widget.getAttribute("pc-queue")}
+          agentId: ${agentId}
+          interactionId: ${interactionId}
+          `);
+        });
+      })();
+    </script>
+  </body>
+</html>
