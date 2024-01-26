@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <script type="module" src="https://auvious.video/widget/dist/auvious/auvious.esm.js"></script>
+  <script nomodule="" src="https://auvious.video/widget/dist/auvious/auvious.js"></script>
+
+  <style>
+
+  </style>
+</head>
+
+
+<body>
+
+</body>
+
+<script>
+  // TODO: change params
+  let widgetOptions = {
+    'locale': 'en-US',
+    'pc-environment': 'mypurecloud.de',
+    'pc-organization-id': '<your-id>',
+    'pc-deployment-id': '<your-id>',
+    'application-id': '<your-id>',
+    'pc-queue': 'AppFoundry',
+    'registration-type': 'name',
+    'customer-display-name': 'Tester',
+    'position-horizontal': 'center'
+  };
+
+  (async () => {
+    await customElements.whenDefined('app-auvious-widget');
+    showWidget();
+  })();
+
+  function showWidget() {
+
+    // create our widget
+    const widget = document.createElement('app-auvious-widget');
+
+    // get all the widget options and pass it to our widget.
+    Object.keys(widgetOptions).forEach(key => {
+      const value = widgetOptions[key];
+      widget.setAttribute(key, value);
+    });
+
+    widget.addEventListener('ready', () => {
+      document
+        .querySelector("app-auvious-widget")
+        .shadowRoot
+        .querySelector('.av-floating-bottom')
+        .setAttribute('style', 'margin-bottom: 30%')
+      // in my screen, with a margin-bottom of 30% the video call is hidden partially.
+    });
+
+    // add the newly created widget to the body.
+    document.body.appendChild(widget);
+  }
+
+
+</script>
+
+</html>
