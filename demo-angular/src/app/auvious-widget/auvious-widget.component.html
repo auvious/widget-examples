@@ -1,0 +1,16 @@
+<app-auvious-widget
+    #widget
+    [pcOrganizationId]="pcOrganizationId"
+    [pcDeploymentId]="pcDeploymentId"
+    [pcCallbackQueue]="pcCallbackQueue"
+    [pcEnvironment]="pcEnvironment"
+    [applicationId]="applicationId"
+    [pcQueue]="pcQueue"
+    auvious-environment="dev.auvious.video"
+    customer-display-name="test"
+    registration-type="name"
+    active-widgets="video,callback,chat,cobrowse"
+    greeting-sound-on="false"
+    (ready)="onReady()"
+>
+</app-auvious-widget>
